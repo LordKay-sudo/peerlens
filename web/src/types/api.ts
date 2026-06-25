@@ -22,6 +22,8 @@ export interface PaperMetadata {
   url?: string | null;
   keywords: string[];
   references_count?: number | null;
+  sections?: Record<string, string>;
+  pdf_analyzed?: boolean;
 }
 
 export interface QualityReport {
@@ -30,4 +32,6 @@ export interface QualityReport {
   signals: QualitySignal[];
   summary: string;
   generated_at: string;
+  sections?: Record<string, string>;
+  pdf_analyzed?: boolean;
 }

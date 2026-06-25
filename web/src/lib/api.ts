@@ -20,3 +20,24 @@ export async function analyzePaper(identifier: string): Promise<QualityReport> {
 
   return response.json();
 }
+
+export async function analyzeUploadedPdf(file: File): Promise<QualityReport> {
+  const form = new FormData();
+  form.append("file", file);
+
+  const response = await fetch(`${API_BASE}/api/v1/papers/analyze/upload`, {
+    method: "POST",
+    body: form,
+  });
+
+  if (!response.ok) {
+    const payload = await response.json().catch(() => ({}));
+    const detail =
+      typeof payload.detail === "string"
+        ? payload.detail
+        : "PDF upload failed. Ensure the file is a valid PDF.";
+    throw new Error(detail);
+  }
+
+  return response.json();
+}

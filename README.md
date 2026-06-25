@@ -14,13 +14,13 @@ PeerLens helps researchers, reviewers, and institutions assess papers with **exp
 
 ![Quality report view](docs/assets/report.png)
 
-## What it does today (v0.1)
+## What it does today (v0.2)
 
 - Ingest papers by **DOI** or **arXiv ID** (URL formats supported)
-- Run automated **quality signals** with severity, evidence, and dimension tags
-- Expose a **FastAPI** service and **CLI** for analysis
-- **Web UI** — Next.js frontend with live paper analysis
-- Designed for extension: RAG, LLM extraction, human rubrics, and workflow orchestration come next
+- **Auto-fetch arXiv PDFs** and extract section headings (methods, results, etc.)
+- **Upload PDFs** for full-text artifact and section analysis
+- Run automated **quality signals**: metadata completeness, **Crossref retraction checks**, **code/data artifact links**
+- Expose a **FastAPI** service, **CLI**, and **web UI**
 
 ## Quick start
 

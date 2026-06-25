@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
-from peerlens.models.schemas import PaperMetadata, QualitySignal
+from peerlens.models.context import AnalysisContext
+from peerlens.models.schemas import QualitySignal
 
 
 class SignalChecker(ABC):
@@ -9,5 +10,5 @@ class SignalChecker(ABC):
     dimension: str
 
     @abstractmethod
-    def check(self, paper: PaperMetadata) -> list[QualitySignal]:
+    def check(self, context: AnalysisContext) -> list[QualitySignal]:
         pass

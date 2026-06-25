@@ -1,4 +1,5 @@
-from peerlens.models.schemas import PaperMetadata, QualitySignal, SignalSeverity
+from peerlens.models.context import AnalysisContext
+from peerlens.models.schemas import QualitySignal, SignalSeverity
 from peerlens.services.signals.base import SignalChecker
 
 
@@ -7,7 +8,8 @@ class MetadataCompletenessChecker(SignalChecker):
     name = "Metadata completeness"
     dimension = "metadata"
 
-    def check(self, paper: PaperMetadata) -> list[QualitySignal]:
+    def check(self, context: AnalysisContext) -> list[QualitySignal]:
+        paper = context.paper
         signals: list[QualitySignal] = []
 
         if not paper.abstract:

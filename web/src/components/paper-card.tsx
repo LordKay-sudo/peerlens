@@ -81,6 +81,24 @@ export function PaperCard({ paper }: PaperCardProps) {
         </div>
       ) : null}
 
+      {paper.sections && Object.keys(paper.sections).length > 0 ? (
+        <div className="mt-6 border-t border-[var(--ink-border)] pt-6">
+          <p className="mb-3 text-[10px] font-medium uppercase tracking-widest text-[var(--gold-dim)]">
+            Extracted sections
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {Object.keys(paper.sections).map((name) => (
+              <span
+                key={name}
+                className="rounded-full border border-[var(--ink-border)] bg-[var(--ink)] px-3 py-1 text-xs capitalize text-[var(--gold-bright)]"
+              >
+                {name}
+              </span>
+            ))}
+          </div>
+        </div>
+      ) : null}
+
       {paper.keywords.length > 0 ? (
         <div className="mt-6 flex flex-wrap gap-2">
           {paper.keywords.slice(0, 6).map((kw) => (

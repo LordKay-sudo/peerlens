@@ -20,22 +20,28 @@ def _parse_crossref_date(parts: list[int] | None) -> datetime | None:
         return datetime(year, 1, 1)
 
 
-async def fetch_from_crossref(
-    parsed: ParsedIdentifier,
+async def fetch_crossref_record(
+    doi: str,
     settings: Settings | None = None,
-) -> PaperMetadata:
+) -> dict:
     settings = settings or get_settings()
-    url = f"https://api.crossref.org/works/{parsed.value}"
+    url = f"https://api.crossref.org/works/{doi}"
     headers = {"User-Agent": f"PeerLens/0.1 (mailto:{settings.crossref_mailto})"}
 
     async with httpx.AsyncClient(timeout=settings.request_timeout_seconds) as client:
         response = await client.get(url, headers=headers)
         if response.status_code == 404:
-            raise IngestionError(f"No Crossref record found for DOI {parsed.value}")
+            raise IngestionError(f"No Crossref record found for DOI {doi}")
         if response.status_code != 200:
             raise IngestionError(f"Crossref API returned {response.status_code}")
+        return response.json().get("message", {})
 
-        payload = response.json().get("message", {})
+
+async def fetch_from_crossref(
+    parsed: ParsedIdentifier,
+    settings: Settings | None = None,
+) -> PaperMetadata:
+    payload = await fetch_crossref_record(parsed.value, settings=settings)
 
     title_parts = payload.get("title") or []
     title = title_parts[0] if title_parts else "Untitled"

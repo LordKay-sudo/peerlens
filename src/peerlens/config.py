@@ -19,6 +19,8 @@ class Settings(BaseSettings):
     app_version: str = "0.1.0"
     crossref_mailto: str = "peerlens@example.com"
     request_timeout_seconds: float = 30.0
+    max_upload_bytes: int = 10 * 1024 * 1024
+    fetch_arxiv_pdf: bool = True
     cors_origins: list[str] = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",

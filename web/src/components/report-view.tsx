@@ -31,7 +31,12 @@ export function ReportView({ report }: ReportViewProps) {
             <h3 className="font-serif text-xl font-medium text-[var(--snow)]">Quality report</h3>
           </div>
           <p className="text-sm leading-relaxed text-[var(--mist)]">{report.summary}</p>
-          <div className="mt-5 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap gap-2">
+            {report.pdf_analyzed ? (
+              <span className="rounded-full border border-[color-mix(in_srgb,var(--teal)_40%,var(--ink-border))] bg-[color-mix(in_srgb,var(--teal)_10%,var(--ink))] px-3 py-1 text-xs text-[var(--teal)]">
+                PDF analyzed
+              </span>
+            ) : null}
             <StatPill label="Signals" value={report.signals.length} />
             {concerns > 0 ? <StatPill label="Concerns" value={concerns} tone="rose" /> : null}
             {warnings > 0 ? <StatPill label="Warnings" value={warnings} tone="amber" /> : null}

@@ -36,6 +36,8 @@ class PaperMetadata(BaseModel):
     url: HttpUrl | None = None
     keywords: list[str] = Field(default_factory=list)
     references_count: int | None = None
+    sections: dict[str, str] = Field(default_factory=dict)
+    pdf_analyzed: bool = False
 
 
 class QualityReport(BaseModel):
@@ -44,6 +46,8 @@ class QualityReport(BaseModel):
     signals: list[QualitySignal] = Field(default_factory=list)
     summary: str
     generated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    sections: dict[str, str] = Field(default_factory=dict)
+    pdf_analyzed: bool = False
 
 
 class AnalyzeRequest(BaseModel):
