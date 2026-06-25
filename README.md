@@ -6,11 +6,20 @@ PeerLens helps researchers, reviewers, and institutions assess papers with **exp
 
 > Decision support for science, not a proprietary credit rating.
 
+## Preview
+
+![PeerLens hero](docs/assets/hero.png)
+
+![PeerLens analyze flow](docs/assets/demo.gif)
+
+![Quality report view](docs/assets/report.png)
+
 ## What it does today (v0.1)
 
 - Ingest papers by **DOI** or **arXiv ID** (URL formats supported)
 - Run automated **quality signals** with severity, evidence, and dimension tags
 - Expose a **FastAPI** service and **CLI** for analysis
+- **Web UI** — Next.js frontend with live paper analysis
 - Designed for extension: RAG, LLM extraction, human rubrics, and workflow orchestration come next
 
 ## Quick start
@@ -45,6 +54,18 @@ peerlens serve --reload
 
 Open [http://localhost:8000/docs](http://localhost:8000/docs) for interactive API docs.
 
+### Run the web UI
+
+In a second terminal:
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). The frontend proxies `/api/*` to the FastAPI backend on port 8000.
+
 ### Analyze a paper (CLI)
 
 ```bash
@@ -64,12 +85,14 @@ curl -X POST http://localhost:8000/api/v1/papers/analyze \
 
 ```
 peerlens/
-├── api/              # FastAPI routes
-├── services/
-│   ├── ingestion/    # DOI (Crossref), arXiv metadata fetchers
-│   ├── signals/      # Pluggable quality checkers
-│   └── reports.py    # Orchestrates ingest → signals → report
-└── models/           # Pydantic schemas
+├── src/peerlens/     # FastAPI backend
+│   ├── api/              # FastAPI routes
+│   ├── services/
+│   │   ├── ingestion/    # DOI (Crossref), arXiv metadata fetchers
+│   │   ├── signals/      # Pluggable quality checkers
+│   │   └── reports.py    # Orchestrates ingest → signals → report
+│   └── models/           # Pydantic schemas
+└── web/              # Next.js frontend (React, Tailwind, Framer Motion)
 ```
 
 **Signal checkers** implement a small interface (`SignalChecker`) and return structured `QualitySignal` objects — each with an ID, severity (`info` / `warning` / `concern`), message, and optional evidence span.

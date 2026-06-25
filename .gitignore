@@ -35,3 +35,6 @@ Thumbs.db
 # Project data (local indices, uploads)
 data/
 *.db
+
+# Screenshot frame intermediates (demo.gif is committed)
+docs/assets/frames/
