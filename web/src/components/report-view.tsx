@@ -24,7 +24,7 @@ export function ReportView({ report }: ReportViewProps) {
     >
       <PaperCard paper={report.paper} />
 
-      <div>
+      <div className="min-w-0">
         <div className="glass mb-6 rounded-2xl p-6">
           <div className="mb-3 flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-[var(--gold-bright)]" />

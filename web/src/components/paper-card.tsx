@@ -24,7 +24,7 @@ export function PaperCard({ paper }: PaperCardProps) {
   const published = formatDate(paper.published);
 
   return (
-    <article className="glass gold-glow sticky top-8 rounded-3xl p-8">
+    <article className="glass gold-glow sticky top-8 min-w-0 rounded-3xl p-8">
       <div className="mb-4 flex items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--ink)]">
           <FileText className="h-4 w-4 text-[var(--gold-bright)]" />
@@ -34,7 +34,7 @@ export function PaperCard({ paper }: PaperCardProps) {
         </span>
       </div>
 
-      <h2 className="font-serif text-2xl font-medium leading-snug tracking-tight text-[var(--snow)] sm:text-3xl">
+      <h2 className="break-words font-serif text-2xl font-medium leading-snug tracking-tight text-[var(--snow)] [overflow-wrap:anywhere] sm:text-3xl">
         {paper.title}
       </h2>
 
