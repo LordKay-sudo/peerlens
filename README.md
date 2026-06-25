@@ -1,0 +1,100 @@
+# PeerLens
+
+**Open infrastructure for transparent research quality signals.**
+
+PeerLens helps researchers, reviewers, and institutions assess papers with **explainable automated checks** — not a single opaque score. It fetches metadata from open sources (Crossref, arXiv), runs pluggable quality signal checkers, and returns a structured report you can inspect, extend, and fork.
+
+> Decision support for science, not a proprietary credit rating.
+
+## What it does today (v0.1)
+
+- Ingest papers by **DOI** or **arXiv ID** (URL formats supported)
+- Run automated **quality signals** with severity, evidence, and dimension tags
+- Expose a **FastAPI** service and **CLI** for analysis
+- Designed for extension: RAG, LLM extraction, human rubrics, and workflow orchestration come next
+
+## Quick start
+
+### Requirements
+
+- Python 3.11+
+- pip (or [uv](https://github.com/astral-sh/uv))
+
+### Install
+
+```bash
+git clone https://github.com/LordKay-sudo/peerlens.git
+cd peerlens
+python -m venv .venv
+
+# Windows
+.venv\Scripts\activate
+
+# macOS / Linux
+source .venv/bin/activate
+
+pip install -e ".[dev]"
+cp .env.example .env
+```
+
+### Run the API
+
+```bash
+peerlens serve --reload
+```
+
+Open [http://localhost:8000/docs](http://localhost:8000/docs) for interactive API docs.
+
+### Analyze a paper (CLI)
+
+```bash
+peerlens analyze 10.1038/nature12373
+peerlens analyze 2301.07041
+```
+
+### Analyze a paper (HTTP)
+
+```bash
+curl -X POST http://localhost:8000/api/v1/papers/analyze \
+  -H "Content-Type: application/json" \
+  -d '{"identifier": "2301.07041"}'
+```
+
+## Architecture
+
+```
+peerlens/
+├── api/              # FastAPI routes
+├── services/
+│   ├── ingestion/    # DOI (Crossref), arXiv metadata fetchers
+│   ├── signals/      # Pluggable quality checkers
+│   └── reports.py    # Orchestrates ingest → signals → report
+└── models/           # Pydantic schemas
+```
+
+**Signal checkers** implement a small interface (`SignalChecker`) and return structured `QualitySignal` objects — each with an ID, severity (`info` / `warning` / `concern`), message, and optional evidence span.
+
+## Roadmap
+
+- [ ] PDF ingestion and section-aware extraction
+- [ ] RAG over paper + references
+- [ ] LLM-assisted claim / method extraction (opt-in, traced)
+- [ ] Human review rubric API (blinded expert scores)
+- [ ] Evaluation harness on known retractions / replication failures
+- [ ] Plugins for Zotero, OpenReview, institutional repos
+
+## Limitations
+
+PeerLens v0.1 analyzes **metadata only** (title, abstract, authors, dates). Absence of a warning is not endorsement. Automated signals are heuristics — always pair with expert judgment for high-stakes decisions.
+
+## Contributing
+
+Issues and PRs welcome. See [GitHub Issues](https://github.com/LordKay-sudo/peerlens/issues) for planned work.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
+
+## Author
+
+Built by [LordKay](https://github.com/LordKay-sudo).
