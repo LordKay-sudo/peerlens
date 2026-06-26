@@ -35,3 +35,20 @@ export interface QualityReport {
   sections?: Record<string, string>;
   pdf_analyzed?: boolean;
 }
+
+export interface CitationSpan {
+  index: number;
+  section?: string | null;
+  excerpt: string;
+  score: number;
+}
+
+export interface AskResponse {
+  identifier: string;
+  question: string;
+  answer: string;
+  citations: CitationSpan[];
+  model?: string | null;
+  chunks_used: number;
+  pdf_analyzed: boolean;
+}

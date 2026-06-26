@@ -1,4 +1,4 @@
-import type { QualityReport } from "@/types/api";
+import type { AskResponse, QualityReport } from "@/types/api";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "";
 
@@ -36,6 +36,25 @@ export async function analyzeUploadedPdf(file: File): Promise<QualityReport> {
       typeof payload.detail === "string"
         ? payload.detail
         : "PDF upload failed. Ensure the file is a valid PDF.";
+    throw new Error(detail);
+  }
+
+  return response.json();
+}
+
+export async function askPaper(identifier: string, question: string): Promise<AskResponse> {
+  const response = await fetch(`${API_BASE}/api/v1/papers/ask`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ identifier, question }),
+  });
+
+  if (!response.ok) {
+    const payload = await response.json().catch(() => ({}));
+    const detail =
+      typeof payload.detail === "string"
+        ? payload.detail
+        : "Could not answer this question.";
     throw new Error(detail);
   }
 

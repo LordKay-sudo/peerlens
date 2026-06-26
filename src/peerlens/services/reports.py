@@ -7,6 +7,7 @@ from peerlens.services.ingestion.crossref import fetch_crossref_record
 from peerlens.services.ingestion.identifiers import parse_identifier
 from peerlens.services.ingestion.pdf import process_pdf
 from peerlens.services.ingestion.pdf_fetch import fetch_arxiv_pdf
+from peerlens.services.rag.cache import cache_context
 from peerlens.services.signals import run_signal_checks
 
 
@@ -79,6 +80,7 @@ async def build_analysis_context(
 
 async def analyze_paper(identifier: str, pdf_bytes: bytes | None = None) -> QualityReport:
     context = await build_analysis_context(identifier, pdf_bytes=pdf_bytes)
+    cache_context(identifier, context)
     signals = run_signal_checks(context)
     paper = context.paper.model_copy(
         update={"sections": context.sections, "pdf_analyzed": context.pdf_analyzed}
@@ -116,6 +118,7 @@ async def analyze_uploaded_pdf(filename: str, pdf_bytes: bytes) -> QualityReport
         sections=sections,
         pdf_analyzed=True,
     )
+    cache_context(paper.identifier, context)
     signals = run_signal_checks(context)
     return QualityReport(
         identifier=paper.identifier,

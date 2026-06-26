@@ -22,4 +22,4 @@ async def test_health(client):
     assert response.status_code == 200
     payload = response.json()
     assert payload["status"] == "ok"
-    assert payload["version"] == "0.1.0"
+    assert payload["version"] == "0.3.0"

@@ -8,3 +8,7 @@ class IngestionError(PeerLensError):
 
 class IdentifierError(PeerLensError):
     """Identifier format is invalid or unsupported."""
+
+
+class RAGError(PeerLensError):
+    """RAG / Q&A pipeline failed."""

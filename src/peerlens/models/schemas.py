@@ -61,3 +61,26 @@ class AnalyzeRequest(BaseModel):
 class HealthResponse(BaseModel):
     status: str
     version: str
+
+
+class AskRequest(BaseModel):
+    identifier: str = Field(..., description="Same identifier used for analysis")
+    question: str = Field(..., min_length=3, max_length=1000)
+    top_k: int | None = Field(default=None, ge=1, le=10)
+
+
+class CitationSpan(BaseModel):
+    index: int
+    section: str | None = None
+    excerpt: str
+    score: float
+
+
+class AskResponse(BaseModel):
+    identifier: str
+    question: str
+    answer: str
+    citations: list[CitationSpan] = Field(default_factory=list)
+    model: str | None = None
+    chunks_used: int = 0
+    pdf_analyzed: bool = False

@@ -4,6 +4,7 @@ import type { QualityReport } from "@/types/api";
 import { motion } from "framer-motion";
 import { PaperCard } from "./paper-card";
 import { SignalCard } from "./signal-card";
+import { AskPanel } from "./ask-panel";
 import { Sparkles } from "lucide-react";
 
 interface ReportViewProps {
@@ -16,12 +17,13 @@ export function ReportView({ report }: ReportViewProps) {
   const infos = report.signals.filter((s) => s.severity === "info").length;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]"
-    >
+    <>
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]"
+      >
       <PaperCard paper={report.paper} />
 
       <div className="min-w-0">
@@ -57,7 +59,14 @@ export function ReportView({ report }: ReportViewProps) {
           ))}
         </div>
       </div>
-    </motion.div>
+      </motion.div>
+
+      <AskPanel
+        identifier={report.identifier}
+        paperTitle={report.paper.title}
+        pdfAnalyzed={report.pdf_analyzed}
+      />
+    </>
   );
 }
 

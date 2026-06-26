@@ -14,12 +14,13 @@ PeerLens helps researchers, reviewers, and institutions assess papers with **exp
 
 ![Quality report view](docs/assets/report.png)
 
-## What it does today (v0.2)
+## What it does today (v0.3)
 
 - Ingest papers by **DOI** or **arXiv ID** (URL formats supported)
 - **Auto-fetch arXiv PDFs** and extract section headings (methods, results, etc.)
 - **Upload PDFs** for full-text artifact and section analysis
 - Run automated **quality signals**: metadata completeness, **Crossref retraction checks**, **code/data artifact links**
+- **RAG Q&A** — ask questions about a paper with cited excerpts (`POST /api/v1/papers/ask`)
 - Expose a **FastAPI** service, **CLI**, and **web UI**
 
 ## Quick start
@@ -73,13 +74,17 @@ peerlens analyze 10.1038/nature12373
 peerlens analyze 2301.07041
 ```
 
-### Analyze a paper (HTTP)
+### Ask a question (HTTP)
+
+Requires `OPENAI_API_KEY` in `.env`.
 
 ```bash
-curl -X POST http://localhost:8000/api/v1/papers/analyze \
+curl -X POST http://localhost:8000/api/v1/papers/ask \
   -H "Content-Type: application/json" \
-  -d '{"identifier": "2301.07041"}'
+  -d '{"identifier": "2301.07041", "question": "What methods does this paper use?"}'
 ```
+
+After analyzing a paper in the web UI, use the **Ask this paper** panel below the report.
 
 ## Architecture
 

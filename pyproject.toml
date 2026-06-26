@@ -1,6 +1,6 @@
 [project]
 name = "peerlens"
-version = "0.2.0"
+version = "0.3.0"
 description = "Open infrastructure for transparent research quality signals"
 readme = "README.md"
 license = { text = "MIT" }

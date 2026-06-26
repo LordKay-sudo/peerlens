@@ -1,5 +1,6 @@
 from functools import lru_cache
 
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -16,7 +17,7 @@ class Settings(BaseSettings):
     port: int = 8000
     log_level: str = "info"
     app_name: str = "PeerLens"
-    app_version: str = "0.1.0"
+    app_version: str = "0.3.0"
     crossref_mailto: str = "peerlens@example.com"
     request_timeout_seconds: float = 30.0
     max_upload_bytes: int = 10 * 1024 * 1024
@@ -25,7 +26,16 @@ class Settings(BaseSettings):
         "http://localhost:3000",
         "http://127.0.0.1:3000",
     ]
-
+    openai_api_key: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices("OPENAI_API_KEY", "PEERLENS_OPENAI_API_KEY"),
+    )
+    openai_base_url: str = "https://api.openai.com/v1"
+    embedding_model: str = "text-embedding-3-small"
+    llm_model: str = "gpt-4o-mini"
+    rag_top_k: int = 5
+    rag_chunk_size: int = 900
+    rag_chunk_overlap: int = 120
 
 @lru_cache
 def get_settings() -> Settings:

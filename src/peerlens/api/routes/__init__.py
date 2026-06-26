@@ -1,3 +1,3 @@
-from peerlens.api.routes import health, papers
+from peerlens.api.routes import ask, health, papers
 
-__all__ = ["health", "papers"]
+__all__ = ["ask", "health", "papers"]
