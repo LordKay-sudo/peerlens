@@ -51,4 +51,5 @@ export interface AskResponse {
   model?: string | null;
   chunks_used: number;
   pdf_analyzed: boolean;
+  demo_mode?: boolean;
 }

@@ -17,6 +17,24 @@ Rules:
 """
 
 
+def _demo_response(
+    context: AnalysisContext,
+    identifier: str,
+    question: str,
+    settings: Settings,
+) -> AskResponse:
+    return AskResponse(
+        identifier=identifier,
+        question=question,
+        answer=settings.rag_demo_message,
+        citations=[],
+        model=None,
+        chunks_used=0,
+        pdf_analyzed=context.pdf_analyzed,
+        demo_mode=True,
+    )
+
+
 def _format_excerpts(matches: list[tuple]) -> str:
     lines: list[str] = []
     for chunk, score in matches:
@@ -60,6 +78,9 @@ async def ask_context(
             "No analyzable text found. Use an arXiv ID (auto PDF) or upload a PDF first."
         )
 
+    if not settings.rag_uses_llm():
+        return _demo_response(context, identifier, question, settings)
+
     client = OpenAIClient(settings=settings)
     chunk_embeddings = await client.embed([chunk.text for chunk in chunks])
     query_embedding = (await client.embed([question]))[0]
@@ -90,4 +111,5 @@ async def ask_context(
         model=settings.llm_model,
         chunks_used=len(citations),
         pdf_analyzed=context.pdf_analyzed,
+        demo_mode=False,
     )

@@ -36,6 +36,17 @@ class Settings(BaseSettings):
     rag_top_k: int = 5
     rag_chunk_size: int = 900
     rag_chunk_overlap: int = 120
+    rag_demo_mode: bool = False
+    rag_demo_message: str = (
+        "This is a demo version of PeerLens — LLM responses are disabled on this deployment. "
+        "Paper analysis and quality signals still work. To enable Q&A, set OPENAI_API_KEY and "
+        "set PEERLENS_RAG_DEMO_MODE=false on the server."
+    )
+
+    def rag_uses_llm(self) -> bool:
+        if self.rag_demo_mode:
+            return False
+        return bool(self.openai_api_key)
 
 @lru_cache
 def get_settings() -> Settings:

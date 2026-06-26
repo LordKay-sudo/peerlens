@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { askPaper } from "@/lib/api";
 import type { AskResponse } from "@/types/api";
-import { Loader2, MessageCircle, Send } from "lucide-react";
+import { Info, Loader2, MessageCircle, Send } from "lucide-react";
 
 const SUGGESTED = [
   "What methods does this paper use?",
@@ -24,6 +24,14 @@ export function AskPanel({ identifier, paperTitle, pdfAnalyzed }: AskPanelProps)
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [response, setResponse] = useState<AskResponse | null>(null);
+  const [demoMode, setDemoMode] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/v1/health")
+      .then((res) => res.json())
+      .then((data) => setDemoMode(Boolean(data.rag_demo_mode)))
+      .catch(() => setDemoMode(false));
+  }, []);
 
   async function submit(value: string) {
     const trimmed = value.trim();
@@ -67,6 +75,16 @@ export function AskPanel({ identifier, paperTitle, pdfAnalyzed }: AskPanelProps)
           </p>
         </div>
       </div>
+
+      {demoMode ? (
+        <div className="mb-5 flex gap-3 rounded-xl border border-[color-mix(in_srgb,var(--amber)_35%,var(--ink-border))] bg-[color-mix(in_srgb,var(--amber)_8%,var(--ink))] px-4 py-3 text-sm text-[var(--amber)]">
+          <Info className="mt-0.5 h-4 w-4 shrink-0" />
+          <p>
+            Demo mode — LLM responses are disabled on this deployment. You can still try the chat
+            UI; answers will show a static notice.
+          </p>
+        </div>
+      ) : null}
 
       <form
         onSubmit={(e) => {
@@ -132,9 +150,15 @@ export function AskPanel({ identifier, paperTitle, pdfAnalyzed }: AskPanelProps)
             animate={{ opacity: 1, y: 0 }}
             className="mt-6 space-y-5"
           >
-            <div className="rounded-2xl border border-[var(--ink-border)] bg-[var(--ink)] p-5">
+            <div
+              className={`rounded-2xl border p-5 ${
+                response.demo_mode
+                  ? "border-[color-mix(in_srgb,var(--amber)_35%,var(--ink-border))] bg-[color-mix(in_srgb,var(--amber)_6%,var(--ink))]"
+                  : "border-[var(--ink-border)] bg-[var(--ink)]"
+              }`}
+            >
               <p className="mb-2 text-[10px] uppercase tracking-widest text-[var(--gold-dim)]">
-                Answer
+                {response.demo_mode ? "Demo response" : "Answer"}
                 {response.model ? (
                   <span className="ml-2 text-[var(--mist)]">via {response.model}</span>
                 ) : null}

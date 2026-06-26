@@ -61,6 +61,7 @@ class AnalyzeRequest(BaseModel):
 class HealthResponse(BaseModel):
     status: str
     version: str
+    rag_demo_mode: bool = False
 
 
 class AskRequest(BaseModel):
@@ -84,3 +85,4 @@ class AskResponse(BaseModel):
     model: str | None = None
     chunks_used: int = 0
     pdf_analyzed: bool = False
+    demo_mode: bool = False

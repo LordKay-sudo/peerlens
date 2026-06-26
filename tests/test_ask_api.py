@@ -19,7 +19,7 @@ async def client(app):
 
 
 @pytest.mark.asyncio
-async def test_ask_without_api_key_returns_503(client, monkeypatch):
+async def test_ask_without_api_key_returns_demo_message(client, monkeypatch):
     async def fake_context(identifier: str) -> AnalysisContext:
         return AnalysisContext(
             paper=PaperMetadata(
@@ -38,5 +38,15 @@ async def test_ask_without_api_key_returns_503(client, monkeypatch):
         "/api/v1/papers/ask",
         json={"identifier": "2301.07041", "question": "What methods are used?"},
     )
-    assert response.status_code == 503
-    assert "OPENAI_API_KEY" in response.json()["detail"]
+    assert response.status_code == 200
+    payload = response.json()
+    assert payload["demo_mode"] is True
+    assert "demo version" in payload["answer"].lower()
+    assert payload["citations"] == []
+
+
+@pytest.mark.asyncio
+async def test_health_reports_demo_mode_without_api_key(client):
+    response = await client.get("/api/v1/health")
+    assert response.status_code == 200
+    assert response.json()["rag_demo_mode"] is True
